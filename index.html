@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Studio — GFM Live Preview & Exporter</title>
+    
+    <!-- GitHub Markdown CSS for authentic GFM styling -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.0/github-markdown-light.min.css">
+    
+    <!-- Highlight.js theme for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    
+    <!-- Custom Application Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Top Navigation / Toolbar Bar -->
+    <header class="app-header">
+        <div class="brand">
+            <svg class="brand-icon" viewBox="0 0 16 16" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M14.85 3H1.15C.52 3 0 3.52 0 4.15v7.7c0 .63.52 1.15 1.15 1.15h13.7c.63 0 1.15-.52 1.15-1.15v-7.7C16 3.52 15.48 3 14.85 3zM2 9.5V5h1.5l2.25 3L8 5h1.5v4.5H8V7.25L6.5 9.5h-1L4 7.25V9.5H2zm11-1h-1.5V6.75L10 8.5H9L7.5 6.75V8.5H6V5h1.5l1.25 2L10 5H11.5v3.5z"></path></svg>
+            <h1>Markdown Studio</h1>
+        </div>
+        <div class="toolbar-actions">
+            <button id="btn-clear" class="btn btn-secondary" title="Clear Editor">Clear</button>
+            <button id="btn-sample" class="btn btn-secondary" title="Load Sample Markdown">Load Sample</button>
+            <button id="btn-export-html" class="btn btn-primary" title="Download standalone HTML file with inlined CSS">Download HTML</button>
+            <button id="btn-export-pdf" class="btn btn-primary" title="Open print dialog to save as PDF">Download PDF</button>
+        </div>
+    </header>
+
+    <!-- Main Split-Pane Workspace -->
+    <main class="app-workspace">
+        <!-- Left Pane: Raw Markdown Input -->
+        <section class="pane editor-pane">
+            <div class="pane-header">
+                <h2>Markdown Editor</h2>
+                <span id="char-count" class="meta-info">0 chars</span>
+            </div>
+            <textarea id="markdown-input" placeholder="Type or paste your raw Markdown here..." spellcheck="false"></textarea>
+        </section>
+
+        <!-- Resizer Handle -->
+        <div class="pane-resizer" id="resizer"></div>
+
+        <!-- Right Pane: Live Rendered Output -->
+        <section class="pane preview-pane">
+            <div class="pane-header">
+                <h2>Live Preview</h2>
+                <span class="meta-info">GitHub Flavored Markdown</span>
+            </div>
+            <!-- markdown-body class applies github-markdown-css rules correctly -->
+            <div id="preview-output" class="markdown-body">
+                <!-- Rendered output appears here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section with Credits -->
+    <footer class="app-footer">
+        <div class="footer-content">
+            <p>Markdown Studio &bull; Client-side GFM Engine</p>
+            <p class="credits">CREATED BY <strong>DEBAYAN GUHA</strong></p>
+        </div>
+    </footer>
+
+    <!-- CDN Dependencies: marked.js, DOMPurify, highlight.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.1/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.9/purify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    <!-- Application Logic -->
+    <script src="script.js"></script>
+</body>
+</html>
