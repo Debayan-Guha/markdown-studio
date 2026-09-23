@@ -6,30 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Primary SEO Meta Tags -->
-    <title>Markdown Studio — Free, Ad-Free & Login-Free GFM Live Preview & Exporter</title>
-    <meta name="title" content="Markdown Studio — Free, Ad-Free & Login-Free GFM Live Preview & Exporter">
+    <title>Markdown Studio — Free, Ad-Free & Login-Free GFM Live Preview & PDF/HTML Exporter</title>
+    <meta name="title" content="Markdown Studio — Free, Ad-Free & Login-Free GFM Live Preview & PDF/HTML Exporter">
     <meta name="description"
-        content="The ultimate fast, login-free, and 100% ad-free online Markdown editor. Enjoy zero limits, instant GitHub Flavored Markdown (GFM) live previews, code highlighting, and rapid PDF/HTML downloads.">
+        content="The ultimate fast, login-free, and 100% ad-free online Markdown editor. Instantly preview GitHub Flavored Markdown (GFM) in real-time, style with custom Word-style fonts, and export directly to clean HTML or PDF files.">
     <meta name="keywords"
-        content="free markdown editor, ad-free markdown viewer, login-free markdown editor, online gfm preview, markdown to pdf, markdown exporter, client-side markdown">
+        content="free markdown editor, markdown live preview, markdown to pdf converter, markdown to html exporter, ad-free markdown viewer, login-free markdown editor, custom font markdown, gfm previewer">
     <meta name="author" content="Debayan Guha">
-    <link rel="canonical" href="https://yourdomain.com/">
+    <link rel="canonical" href="https://markdownstudio.internetcommunication.online/">
 
     <!-- Open Graph / Social Sharing Meta Tags -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://yourdomain.com/">
-    <meta property="og:title" content="Markdown Studio — Free, Ad-Free & Login-Free GFM Live Preview & Exporter">
+    <meta property="og:url" content="https://markdownstudio.internetcommunication.online/">
+    <meta property="og:title" content="Markdown Studio — Live GFM Preview, Custom Fonts & PDF/HTML Exporter">
     <meta property="og:description"
-        content="No ads, no logins, no limits. Write markdown, see instant live GFM previews, and download PDFs instantly in your browser.">
-    <meta property="og:image" content="https://yourdomain.com/assets/social-preview.png">
+        content="No ads, no logins, no limits. Type raw Markdown and see instant live previews, switch professional typography styles, and download as styled HTML or PDF files instantly.">
+    <meta property="og:image" content="https://markdownstudio.internetcommunication.online/assets/social-preview.png">
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://yourdomain.com/">
-    <meta name="twitter:title" content="Markdown Studio — Free, Ad-Free & Login-Free Markdown Editor">
+    <meta name="twitter:url" content="https://markdownstudio.internetcommunication.online/">
+    <meta name="twitter:title" content="Markdown Studio — Live Markdown Preview & Exporter">
     <meta name="twitter:description"
-        content="Fast, private, client-side markdown editor with zero ads, zero logins, and instant PDF/HTML exports.">
-    <meta name="twitter:image" content="https://yourdomain.com/assets/social-preview.png">
+        content="Fast, private, client-side Markdown studio with zero ads, zero logins, live GFM preview, custom fonts, and instant PDF/HTML downloads.">
+    <meta name="twitter:image" content="https://markdownstudio.internetcommunication.online/assets/social-preview.png">
 
     <!-- GitHub Markdown CSS for authentic GFM styling -->
     <link rel="stylesheet"
@@ -40,6 +40,12 @@
 
     <!-- Custom Application Styles -->
     <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
@@ -70,6 +76,19 @@
                 title="Download standalone HTML file with inlined CSS">Download HTML</button>
             <button id="btn-export-pdf" class="btn btn-primary" title="Open print dialog to save as PDF">Download
                 PDF</button>
+        </div>
+        <!-- Word-style Font Family Selector -->
+        <div class="toolbar-group">
+            <label for="font-family-select" class="toolbar-label">Font:</label>
+            <select id="font-family-select" class="number-control" title="Choose font family"
+                style="width: 130px; cursor: pointer;">
+                <option value="'Inter', sans-serif" selected>Inter</option>
+                <option value="'Segoe UI', sans-serif">Segoe UI</option>
+                <option value="'Arial', sans-serif">Arial</option>
+                <option value="'Georgia', serif">Georgia</option>
+                <option value="'Fira Code', monospace">Fira Code</option>
+                <option value="'Courier New', monospace">Courier New</option>
+            </select>
         </div>
     </header>
 

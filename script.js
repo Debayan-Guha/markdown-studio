@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const previewOutput = document.getElementById('preview-output');
     const charCount = document.getElementById('char-count');
     const fontSizeInput = document.getElementById('font-size-input');
+    const fontSelect = document.getElementById('font-family-select'); // Word-style Font Selector
     const btnClear = document.getElementById('btn-clear');
     const btnSample = document.getElementById('btn-sample');
     const btnExportHtml = document.getElementById('btn-export-html');
@@ -123,7 +124,7 @@ Here is some text referencing a footnote[^1].
         breaks: true,
         headerIds: true,
         mangle: false,
-        highlight: function(code, lang) {
+        highlight: function (code, lang) {
             if (lang && hljs.getLanguage(lang)) {
                 try {
                     return hljs.highlight(code, { language: lang }).value;
@@ -239,7 +240,7 @@ Here is some text referencing a footnote[^1].
 
     function debounce(func, wait) {
         let timeout;
-        return function(...args) {
+        return function (...args) {
             clearTimeout(timeout);
             timeout = setTimeout(() => func.apply(this, args), wait);
         };
@@ -260,6 +261,15 @@ Here is some text referencing a footnote[^1].
             previewOutput.style.fontSize = `${val}px`;
         }
     });
+
+    // Word-style Font Family Switcher Listener
+    if (fontSelect) {
+        fontSelect.addEventListener('change', (e) => {
+            const selectedFont = e.target.value;
+            markdownInput.style.fontFamily = selectedFont;
+            previewOutput.style.fontFamily = selectedFont;
+        });
+    }
 
     btnClear.addEventListener('click', () => {
         if (confirm('Are you sure you want to clear the editor?')) {
@@ -282,6 +292,8 @@ Here is some text referencing a footnote[^1].
         const markdownText = markdownInput.value;
         const currentSizeVal = parseFloat(fontSizeInput.value) || 15;
         const currentFontSize = `${currentSizeVal}px`;
+        const currentFontFamily = fontSelect ? fontSelect.value : "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif";
+
         const rawHtml = marked.parse(markdownText);
         const cleanHtml = DOMPurify.sanitize(rawHtml, { ADD_ATTR: ['target', 'rel'] });
 
@@ -291,12 +303,16 @@ Here is some text referencing a footnote[^1].
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Markdown Export</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.0/github-markdown-light.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
     <style>
         body {
             background-color: #ffffff;
             padding: 40px;
+            font-family: ${currentFontFamily};
         }
         .markdown-body {
             box-sizing: border-box;
@@ -304,6 +320,7 @@ Here is some text referencing a footnote[^1].
             max-width: 980px;
             margin: 0 auto;
             font-size: ${currentFontSize};
+            font-family: ${currentFontFamily};
         }
         @media (max-width: 767px) {
             body { padding: 15px; }
@@ -353,7 +370,7 @@ Here is some text referencing a footnote[^1].
             text-align: center;
             font-size: 0.8rem;
             color: #586069;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            font-family: ${currentFontFamily};
         }
     </style>
 </head>
@@ -412,6 +429,7 @@ ${cleanHtml}
         const renderedHtml = previewOutput.innerHTML;
         const currentSizeVal = parseFloat(fontSizeInput.value) || 15;
         const currentFontSize = `${currentSizeVal}px`;
+        const currentFontFamily = fontSelect ? fontSelect.value : "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif";
 
         const iframe = document.createElement('iframe');
         iframe.style.position = 'fixed';
@@ -430,6 +448,9 @@ ${cleanHtml}
 <head>
     <meta charset="UTF-8">
     <title>Markdown PDF Export</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.0/github-markdown-light.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
     <style>
@@ -441,11 +462,12 @@ ${cleanHtml}
             margin: 0;
             padding: 0;
             background: #ffffff;
+            font-family: ${currentFontFamily};
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            font-family: ${currentFontFamily};
         }
         .markdown-body {
             box-sizing: border-box;
@@ -454,6 +476,7 @@ ${cleanHtml}
             padding: 0;
             margin: 0;
             font-size: ${currentFontSize};
+            font-family: ${currentFontFamily};
             line-height: 1.55;
             color: #24292e;
         }
@@ -473,6 +496,7 @@ ${cleanHtml}
             margin: 0;
             border-radius: 6px;
             border: 1px solid #e1e4e8;
+            font-family: ${currentFontFamily};
         }
         .copy-code-btn {
             display: none !important;
