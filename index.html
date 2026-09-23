@@ -1,25 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Markdown Studio — GFM Live Preview & Exporter</title>
-    
+
+    <!-- Primary SEO Meta Tags -->
+    <title>Markdown Studio — Free, Ad-Free & Login-Free GFM Live Preview & Exporter</title>
+    <meta name="title" content="Markdown Studio — Free, Ad-Free & Login-Free GFM Live Preview & Exporter">
+    <meta name="description"
+        content="The ultimate fast, login-free, and 100% ad-free online Markdown editor. Enjoy zero limits, instant GitHub Flavored Markdown (GFM) live previews, code highlighting, and rapid PDF/HTML downloads.">
+    <meta name="keywords"
+        content="free markdown editor, ad-free markdown viewer, login-free markdown editor, online gfm preview, markdown to pdf, markdown exporter, client-side markdown">
+    <meta name="author" content="Debayan Guha">
+    <link rel="canonical" href="https://yourdomain.com/">
+
+    <!-- Open Graph / Social Sharing Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com/">
+    <meta property="og:title" content="Markdown Studio — Free, Ad-Free & Login-Free GFM Live Preview & Exporter">
+    <meta property="og:description"
+        content="No ads, no logins, no limits. Write markdown, see instant live GFM previews, and download PDFs instantly in your browser.">
+    <meta property="og:image" content="https://yourdomain.com/assets/social-preview.png">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://yourdomain.com/">
+    <meta name="twitter:title" content="Markdown Studio — Free, Ad-Free & Login-Free Markdown Editor">
+    <meta name="twitter:description"
+        content="Fast, private, client-side markdown editor with zero ads, zero logins, and instant PDF/HTML exports.">
+    <meta name="twitter:image" content="https://yourdomain.com/assets/social-preview.png">
+
     <!-- GitHub Markdown CSS for authentic GFM styling -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.0/github-markdown-light.min.css">
-    
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.0/github-markdown-light.min.css">
+
     <!-- Highlight.js theme for code syntax highlighting -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
-    
+
     <!-- Custom Application Styles -->
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <!-- Top Navigation / Toolbar Bar -->
     <header class="app-header">
         <div class="brand">
-            <svg class="brand-icon" viewBox="0 0 16 16" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M14.85 3H1.15C.52 3 0 3.52 0 4.15v7.7c0 .63.52 1.15 1.15 1.15h13.7c.63 0 1.15-.52 1.15-1.15v-7.7C16 3.52 15.48 3 14.85 3zM2 9.5V5h1.5l2.25 3L8 5h1.5v4.5H8V7.25L6.5 9.5h-1L4 7.25V9.5H2zm11-1h-1.5V6.75L10 8.5H9L7.5 6.75V8.5H6V5h1.5l1.25 2L10 5H11.5v3.5z"></path></svg>
+            <svg class="brand-icon" viewBox="0 0 16 16" width="20" height="20" aria-hidden="true">
+                <path fill="currentColor"
+                    d="M14.85 3H1.15C.52 3 0 3.52 0 4.15v7.7c0 .63.52 1.15 1.15 1.15h13.7c.63 0 1.15-.52 1.15-1.15v-7.7C16 3.52 15.48 3 14.85 3zM2 9.5V5h1.5l2.25 3L8 5h1.5v4.5H8V7.25L6.5 9.5h-1L4 7.25V9.5H2zm11-1h-1.5V6.75L10 8.5H9L7.5 6.75V8.5H6V5h1.5l1.25 2L10 5H11.5v3.5z">
+                </path>
+            </svg>
             <h1>Markdown Studio</h1>
         </div>
         <div class="toolbar-actions">
@@ -27,14 +59,17 @@
             <div class="toolbar-group">
                 <label for="font-size-input" class="toolbar-label">Text Size:</label>
                 <div class="font-size-control-wrapper">
-                    <input type="number" id="font-size-input" class="number-control" value="15" min="8" max="96" step="1" title="Enter custom font size in pixels">
+                    <input type="number" id="font-size-input" class="number-control" value="15" min="8" max="96"
+                        step="1" title="Enter custom font size in pixels">
                     <span class="unit-label">px</span>
                 </div>
             </div>
             <button id="btn-clear" class="btn btn-secondary" title="Clear Editor">Clear</button>
             <button id="btn-sample" class="btn btn-secondary" title="Load Sample Markdown">Load Sample</button>
-            <button id="btn-export-html" class="btn btn-primary" title="Download standalone HTML file with inlined CSS">Download HTML</button>
-            <button id="btn-export-pdf" class="btn btn-primary" title="Open print dialog to save as PDF">Download PDF</button>
+            <button id="btn-export-html" class="btn btn-primary"
+                title="Download standalone HTML file with inlined CSS">Download HTML</button>
+            <button id="btn-export-pdf" class="btn btn-primary" title="Open print dialog to save as PDF">Download
+                PDF</button>
         </div>
     </header>
 
@@ -46,7 +81,8 @@
                 <h2>Markdown Editor</h2>
                 <span id="char-count" class="meta-info">0 chars</span>
             </div>
-            <textarea id="markdown-input" placeholder="Type or paste your raw Markdown here..." spellcheck="false"></textarea>
+            <textarea id="markdown-input" placeholder="Type or paste your raw Markdown here..."
+                spellcheck="false"></textarea>
         </section>
 
         <!-- Resizer Handle -->
@@ -68,7 +104,7 @@
     <!-- Footer Section with Credits -->
     <footer class="app-footer">
         <div class="footer-content">
-            <p>Markdown Studio &bull; Client-side GFM Engine</p>
+            <p>Markdown Studio &bull; 100% Ad-Free, Login-Free & Client-Side GFM Engine &bull; Zero Limits</p>
             <p class="credits">CREATED BY <strong>DEBAYAN GUHA</strong></p>
         </div>
     </footer>
@@ -77,8 +113,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.1/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.9/purify.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    
+
     <!-- Application Logic -->
     <script src="script.js"></script>
 </body>
+
 </html>
