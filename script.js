@@ -1,14 +1,17 @@
 /**
  * Markdown Studio - Client-Side Logic
  * Handles marked.js configuration, DOMPurify sanitization, debounce rendering,
- * syntax highlighting, copy-to-clipboard functionality, and standalone HTML/PDF exports.
+ * syntax highlighting, copy-to-clipboard functionality, custom font scaling, and exports.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // DOM Element references
+    // ==========================================================
+    // 1. DOM Element References
+    // ==========================================================
     const markdownInput = document.getElementById('markdown-input');
     const previewOutput = document.getElementById('preview-output');
     const charCount = document.getElementById('char-count');
+    const fontSizeInput = document.getElementById('font-size-input');
     const btnClear = document.getElementById('btn-clear');
     const btnSample = document.getElementById('btn-sample');
     const btnExportHtml = document.getElementById('btn-export-html');
@@ -16,7 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const resizer = document.getElementById('resizer');
     const editorPane = markdownInput.closest('.pane');
 
-    // Default sample markdown demonstrating all GFM features requested
+    // ==========================================================
+    // 2. Default Sample Markdown
+    // ==========================================================
     const sampleMarkdown = `# Markdown Studio — GFM Showcase
 
 Welcome to **Markdown Studio**, a fully client-side GFM editor and converter. Below is a comprehensive sample demonstrating all supported syntax features.
@@ -110,9 +115,9 @@ Here is some text referencing a footnote[^1].
 [^1]: This is the detailed footnote explanatory text rendered at the bottom of the document.
 `;
 
-    /**
-     * Configure marked.js with GFM options and highlight.js integration
-     */
+    // ==========================================================
+    // 3. Marked.js Configuration
+    // ==========================================================
     marked.setOptions({
         gfm: true,
         breaks: true,
@@ -130,10 +135,9 @@ Here is some text referencing a footnote[^1].
         }
     });
 
-    /**
-     * Renders raw markdown string into sanitized, interactive HTML preview.
-     * @param {string} markdownText 
-     */
+    // ==========================================================
+    // 4. Core Rendering Functions
+    // ==========================================================
     function renderMarkdown(markdownText) {
         if (!markdownText || markdownText.trim() === '') {
             previewOutput.innerHTML = `
@@ -152,20 +156,15 @@ Here is some text referencing a footnote[^1].
             return;
         }
 
-        // Update character count
         charCount.textContent = `${markdownText.length.toLocaleString()} chars`;
 
-        // Parse Markdown to raw HTML via marked.js
         const rawHtml = marked.parse(markdownText);
-
-        // Sanitize HTML using DOMPurify to prevent XSS attacks while retaining safe tags/attributes
         const cleanHtml = DOMPurify.sanitize(rawHtml, {
-            ADD_ATTR: ['target', 'rel'] // Allow target="_blank" for safe external links
+            ADD_ATTR: ['target', 'rel']
         });
 
         previewOutput.innerHTML = cleanHtml;
 
-        // Post-processing 1: Ensure all external links open securely in a new tab
         const links = previewOutput.querySelectorAll('a');
         links.forEach(link => {
             if (link.hostname !== window.location.hostname && !link.getAttribute('target')) {
@@ -174,19 +173,12 @@ Here is some text referencing a footnote[^1].
             }
         });
 
-        // Post-processing 2: Inject copy buttons into rendered code blocks
         enhanceCodeBlocks(previewOutput);
     }
 
-    /**
-     * Wraps <pre><code> blocks with a wrapper div and appends a hover-to-copy button.
-     * Works identically in the live preview and in exported HTML files.
-     * @param {HTMLElement} container 
-     */
     function enhanceCodeBlocks(container) {
         const preElements = container.querySelectorAll('pre');
         preElements.forEach(pre => {
-            // Avoid double wrapping if already enhanced
             if (pre.parentNode.classList && pre.parentNode.classList.contains('code-block-wrapper')) {
                 return;
             }
@@ -209,7 +201,6 @@ Here is some text referencing a footnote[^1].
                     await navigator.clipboard.writeText(textToCopy);
                     showCopiedFeedback(copyBtn);
                 } catch (err) {
-                    // Fallback for older browsers or restricted iframe contexts
                     fallbackCopyText(textToCopy, copyBtn);
                 }
             });
@@ -218,10 +209,6 @@ Here is some text referencing a footnote[^1].
         });
     }
 
-    /**
-     * Displays temporary "Copied!" feedback state on the copy button.
-     * @param {HTMLButtonElement} btn 
-     */
     function showCopiedFeedback(btn) {
         btn.textContent = 'Copied!';
         btn.classList.add('copied');
@@ -231,15 +218,10 @@ Here is some text referencing a footnote[^1].
         }, 2000);
     }
 
-    /**
-     * Fallback copy method using temporary textarea and execCommand.
-     * @param {string} text 
-     * @param {HTMLButtonElement} btn 
-     */
     function fallbackCopyText(text, btn) {
         const textarea = document.createElement('textarea');
         textarea.value = text;
-        textarea.style.position = 'fixed'; // Avoid scrolling to bottom
+        textarea.style.position = 'fixed';
         document.body.appendChild(textarea);
         textarea.focus();
         textarea.select();
@@ -248,8 +230,6 @@ Here is some text referencing a footnote[^1].
             const successful = document.execCommand('copy');
             if (successful) {
                 showCopiedFeedback(btn);
-            } else {
-                console.error('Fallback copy command failed.');
             }
         } catch (err) {
             console.error('Fallback copy error:', err);
@@ -257,11 +237,6 @@ Here is some text referencing a footnote[^1].
         document.body.removeChild(textarea);
     }
 
-    /**
-     * Debounce helper to optimize live rendering performance on typing.
-     * @param {Function} func 
-     * @param {number} wait 
-     */
     function debounce(func, wait) {
         let timeout;
         return function(...args) {
@@ -270,14 +245,22 @@ Here is some text referencing a footnote[^1].
         };
     }
 
-    // Live typing event listener with ~150ms debounce
+    // ==========================================================
+    // 5. Event Listeners & User Interactions
+    // ==========================================================
     const handleInputDebounced = debounce(() => {
         renderMarkdown(markdownInput.value);
     }, 150);
 
     markdownInput.addEventListener('input', handleInputDebounced);
 
-    // Toolbar button actions
+    fontSizeInput.addEventListener('input', (e) => {
+        const val = parseFloat(e.target.value);
+        if (!isNaN(val) && val >= 6 && val <= 200) {
+            previewOutput.style.fontSize = `${val}px`;
+        }
+    });
+
     btnClear.addEventListener('click', () => {
         if (confirm('Are you sure you want to clear the editor?')) {
             markdownInput.value = '';
@@ -292,13 +275,16 @@ Here is some text referencing a footnote[^1].
         markdownInput.focus();
     });
 
-    // Standalone HTML Export feature
+    // ==========================================================
+    // 6. Export Features (HTML & PDF)
+    // ==========================================================
     btnExportHtml.addEventListener('click', () => {
         const markdownText = markdownInput.value;
+        const currentSizeVal = parseFloat(fontSizeInput.value) || 15;
+        const currentFontSize = `${currentSizeVal}px`;
         const rawHtml = marked.parse(markdownText);
         const cleanHtml = DOMPurify.sanitize(rawHtml, { ADD_ATTR: ['target', 'rel'] });
 
-        // Construct a complete, standalone .html document with inlined GitHub Markdown CSS & copy script
         const standaloneDoc = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -317,10 +303,10 @@ Here is some text referencing a footnote[^1].
             min-width: 200px;
             max-width: 980px;
             margin: 0 auto;
+            font-size: ${currentFontSize};
         }
         @media (max-width: 767px) {
             body { padding: 15px; }
-            .markdown-body { font-size: 14px; }
         }
         .code-block-wrapper {
             position: relative;
@@ -377,7 +363,6 @@ ${cleanHtml}
     <p>Markdown Studio &bull; CREATED BY <strong>DEBAYAN GUHA</strong></p>
 </div>
 <script>
-    // Self-contained copy button logic for exported standalone HTML
     document.addEventListener('DOMContentLoaded', () => {
         const preElements = document.querySelectorAll('pre');
         preElements.forEach(pre => {
@@ -412,7 +397,6 @@ ${cleanHtml}
 </body>
 </html>`;
 
-        // Trigger browser download of .html file
         const blob = new Blob([standaloneDoc], { type: 'text/html;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -424,12 +408,110 @@ ${cleanHtml}
         URL.revokeObjectURL(url);
     });
 
-    // PDF Export feature (Triggers browser print dialog optimized via print CSS)
     btnExportPdf.addEventListener('click', () => {
-        window.print();
+        const renderedHtml = previewOutput.innerHTML;
+        const currentSizeVal = parseFloat(fontSizeInput.value) || 15;
+        const currentFontSize = `${currentSizeVal}px`;
+
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'fixed';
+        iframe.style.right = '0';
+        iframe.style.bottom = '0';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = '0';
+        iframe.style.visibility = 'hidden';
+        document.body.appendChild(iframe);
+
+        const doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write(`<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Markdown PDF Export</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.0/github-markdown-light.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <style>
+        @page {
+            size: A4;
+            margin: 18mm 15mm 18mm 15mm;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        }
+        .markdown-body {
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 100%;
+            padding: 0;
+            margin: 0;
+            font-size: ${currentFontSize};
+            line-height: 1.55;
+            color: #24292e;
+        }
+        pre, blockquote, table, tr, img, .code-block-wrapper {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            page-break-after: avoid;
+            break-after: avoid;
+        }
+        .code-block-wrapper {
+            position: relative;
+            margin-bottom: 16px;
+        }
+        .code-block-wrapper pre {
+            margin: 0;
+            border-radius: 6px;
+            border: 1px solid #e1e4e8;
+        }
+        .copy-code-btn {
+            display: none !important;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        .empty-state {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="markdown-body">
+${renderedHtml}
+</body>
+</html>`);
+        doc.close();
+
+        iframe.onload = () => {
+            setTimeout(() => {
+                try {
+                    iframe.contentWindow.focus();
+                    iframe.contentWindow.print();
+                } catch (err) {
+                    console.error('Print failed:', err);
+                }
+                setTimeout(() => {
+                    if (iframe.parentNode) {
+                        iframe.parentNode.removeChild(iframe);
+                    }
+                }, 3000);
+            }, 300);
+        };
     });
 
-    // Split-pane resizer mouse interaction
+    // ==========================================================
+    // 7. Split-Pane Resizer Logic
+    // ==========================================================
     let isResizing = false;
     resizer.addEventListener('mousedown', (e) => {
         isResizing = true;
@@ -443,7 +525,7 @@ ${cleanHtml}
         const totalWidth = window.innerWidth;
         const leftWidth = e.clientX;
         const percentage = (leftWidth / totalWidth) * 100;
-        
+
         if (percentage > 15 && percentage < 85) {
             editorPane.style.flex = `0 0 ${percentage}%`;
         }
@@ -457,7 +539,25 @@ ${cleanHtml}
         }
     });
 
-    // Initialization: Load sample markdown by default so user immediately sees preview
+    // ==========================================================
+    // 8. Initialization
+    // ==========================================================
     markdownInput.value = sampleMarkdown;
     renderMarkdown(sampleMarkdown);
+});
+
+// ==========================================================
+// 9. Inspection Protection Protections
+// ==========================================================
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+document.addEventListener('keydown', event => {
+    if (
+        event.key === 'F12' ||
+        (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J' || event.key === 'C')) ||
+        (event.ctrlKey && event.key === 'U')
+    ) {
+        event.preventDefault();
+        alert('Inspection is disabled for this application.');
+    }
 });

@@ -23,6 +23,14 @@
             <h1>Markdown Studio</h1>
         </div>
         <div class="toolbar-actions">
+            <!-- Custom Free-form Text Size Control -->
+            <div class="toolbar-group">
+                <label for="font-size-input" class="toolbar-label">Text Size:</label>
+                <div class="font-size-control-wrapper">
+                    <input type="number" id="font-size-input" class="number-control" value="15" min="8" max="96" step="1" title="Enter custom font size in pixels">
+                    <span class="unit-label">px</span>
+                </div>
+            </div>
             <button id="btn-clear" class="btn btn-secondary" title="Clear Editor">Clear</button>
             <button id="btn-sample" class="btn btn-secondary" title="Load Sample Markdown">Load Sample</button>
             <button id="btn-export-html" class="btn btn-primary" title="Download standalone HTML file with inlined CSS">Download HTML</button>
@@ -51,7 +59,7 @@
                 <span class="meta-info">GitHub Flavored Markdown</span>
             </div>
             <!-- markdown-body class applies github-markdown-css rules correctly -->
-            <div id="preview-output" class="markdown-body">
+            <div id="preview-output" class="markdown-body" style="font-size: 15px;">
                 <!-- Rendered output appears here -->
             </div>
         </section>
